@@ -1,5 +1,15 @@
-import Perfil_Proveedor_Edit from '../../screens/Perfil_Proveedor_Edit';
+import { useState } from 'react';
+import Contraseña_de_seguridad_del_cambio from '../../screens/Contrasena_de_seguridad_del_cambio';
+import NuevaContraseña from '../../screens/NuevaContraseña';
 
 export default function Index() {
-  return <Perfil_Proveedor_Edit/>;
+  const [step, setStep] = useState(1);
+
+  if (step === 1) {
+    return (
+      <Contraseña_de_seguridad_del_cambio onContinue={() => setStep(2)} />
+    );
+  }
+
+  return <NuevaContraseña />;
 }
