@@ -1,7 +1,5 @@
-// screens/Buscar.js
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-// 1. Eliminamos SafeAreaView de los imports y agregamos StatusBar
 import { ImageBackground, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
@@ -20,10 +18,10 @@ const ITEMS = [
     screen: 'Comida',
   },
   {
-    id: 'equipamentos',
+    id: 'equipamientos',
     title: 'Equipamentos',
     image: require('../assets/images/equipo.jpg'),
-    screen: 'Equipamentos',
+    screen: 'Equipamientos',
   },
 ];
 
@@ -31,19 +29,15 @@ export default function Buscar() {
   const navigation = useNavigation();
 
   const handlePress = (item) => {
-    // Verificamos si existe la pantalla antes de navegar
     if (item.screen) {
       navigation.navigate(item.screen);
     }
   };
 
   return (
-    // 2. Usamos View en lugar de SafeAreaView
     <View style={styles.container}>
-      {/* Navbar fija arriba */}
       <Navbar />
 
-      {/* Contenido scrollable */}
       <View style={styles.contentContainer}>
         <ScrollView 
           contentContainerStyle={styles.scrollContainer}
@@ -83,17 +77,15 @@ export default function Buscar() {
         </ScrollView>
       </View>
 
-      {/* Footer fijo abajo */}
       <Footer />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { // Renombrado de 'safe' a 'container' para claridad
+  container: { 
     flex: 1,
     backgroundColor: '#fff',
-    // 3. Ajuste opcional para que en Android no se monte sobre la barra de estado
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   contentContainer: {

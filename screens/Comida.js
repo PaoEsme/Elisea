@@ -4,33 +4,30 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
-const equipamentos = [
-  { id: '1', nombre: 'Sillas Tiffany', imagen: require('../assets/images/Equipamiento.jpeg') },
-  { id: '2', nombre: 'Mesas Redondas', imagen: require('../assets/images/Equipamiento.jpeg') },
-  { id: '3', nombre: 'Sonido DJ', imagen: require('../assets/images/Equipamiento.jpeg') },
-  { id: '4', nombre: 'Carpas', imagen: require('../assets/images/Equipamiento.jpeg') },
+const serviciosComida = [
+  { id: '1', nombre: 'Banquete Gourmet', imagen: require('../assets/images/comida.jpg') },
+  { id: '2', nombre: 'Taquiza Tradicional', imagen: require('../assets/images/comida.jpg') },
+  { id: '3', nombre: 'Buffet Internacional', imagen: require('../assets/images/comida.jpg') },
+  { id: '4', nombre: 'Servicio de Bartender', imagen: require('../assets/images/comida.jpg') },
 ];
 
-export default function Equipamentos({ route }) {
+export default function Comida({ route }) {
   const navigation = useNavigation();
   const filtros = route.params?.filtros;
 
-  const equipamentosFiltered = equipamentos.filter(item => {
+  const comidaFiltrada = serviciosComida.filter(item => {
     if (!filtros) return true;
-    
     let cumpleFiltros = true;
-    
     if (filtros.precio) {
-      cumpleFiltros = cumpleFiltros && true; 
+      cumpleFiltros = cumpleFiltros && true;
     }
-    
     return cumpleFiltros;
   });
 
-  const renderEquipamento = ({ item }) => (
+  const renderComida = ({ item }) => (
     <TouchableOpacity 
       style={styles.card}
-      onPress={() => navigation.navigate('DetallesEquipamento', { equipamento: item })}
+      onPress={() => navigation.navigate('DetallesComida', { comida: item })}
     >
       <Image source={item.imagen} style={styles.image} resizeMode="cover" />
       <Text style={styles.title}>{item.nombre}</Text>
@@ -49,11 +46,11 @@ export default function Equipamentos({ route }) {
           >
             <Ionicons name="arrow-back" size={24} color="#6f2dbd" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Equipamentos</Text>
+          <Text style={styles.headerTitle}>Comida</Text>
         </View>
 
         <TouchableOpacity 
-          onPress={() => navigation.navigate('EquipamientosFiltrado')}
+          onPress={() => navigation.navigate('ComidaFiltrado')}
           style={styles.filterButton}
           activeOpacity={0.7}
         >
@@ -62,8 +59,8 @@ export default function Equipamentos({ route }) {
       </View>
 
       <FlatList
-        data={equipamentosFiltered}
-        renderItem={renderEquipamento}
+        data={comidaFiltrada}
+        renderItem={renderComida}
         keyExtractor={(item) => item.id}
         numColumns={2}
         contentContainerStyle={styles.list}
@@ -75,32 +72,23 @@ export default function Equipamentos({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+  container: { flex: 1, backgroundColor: '#fff' },
   header: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#fff',
     zIndex: 10,
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backButton: {
-    marginRight: 10, 
-    padding: 4,      
-  },
+  headerLeft: { flexDirection: 'row', alignItems: 'center' },
+  backButton: { marginRight: 10, padding: 4 },
   headerTitle: {
-    fontSize: 24, 
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#6f2dbd',
-    textTransform: 'uppercase', 
+    textTransform: 'uppercase',
   },
   filterButton: {
     padding: 8,
@@ -109,7 +97,7 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingHorizontal: 10,
-    paddingBottom: 80, 
+    paddingBottom: 80,
   },
   card: {
     flex: 1,
@@ -119,10 +107,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },

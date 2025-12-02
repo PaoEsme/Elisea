@@ -23,9 +23,7 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <Navbar />
-
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Sección PARA TI */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>PARA TI</Text>
