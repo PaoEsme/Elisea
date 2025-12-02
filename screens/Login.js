@@ -1,12 +1,61 @@
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import { Dimensions, Image, Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 export default function Login() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Campos faltantes', 'Ingresa correo y contraseña.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const q = query(
+        collection(db, 'usuarios'),
+        where('correo', '==', email.trim().toLowerCase()),
+        where('contraseña', '==', password)
+      );
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        Alert.alert('Error', 'Correo o contraseña incorrectos.');
+        return;
+      }
+
+      // Puedes guardar datos del usuario aquí si luego usas contexto
+      // const userDoc = snap.docs[0].data();
+
+      navigation.replace('Home'); // misma ruta que ya usabas
+    } catch (err) {
+      console.error('Error en login:', err);
+      Alert.alert('Error', 'No se pudo iniciar sesión.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -17,7 +66,7 @@ export default function Login() {
         <View style={styles.inner}>
           <View style={styles.bannerContainer}>
             <Image
-              source={require('../assets/images/Login.png')} 
+              source={require('../assets/images/Login.png')}
               style={styles.banner}
               resizeMode="cover"
             />
@@ -55,11 +104,14 @@ export default function Login() {
             <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.button} 
-            onPress={() => navigation.navigate('Home')}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleLogin}
+            disabled={loading}
           >
-          <Text style={styles.buttonText}>ENTRAR</Text>
+            <Text style={styles.buttonText}>
+              {loading ? 'Entrando...' : 'ENTRAR'}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
@@ -72,6 +124,7 @@ export default function Login() {
     </KeyboardAvoidingView>
   );
 }
+
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -86,13 +139,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   bannerContainer: {
-    width: windowWidth + 10,     
+    width: windowWidth + 10,
     height: 300,
     overflow: 'hidden',
     borderBottomLeftRadius: 100,
     borderBottomRightRadius: 0,
     marginBottom: 30,
-    marginHorizontal: 10,      
+    marginHorizontal: 10,
   },
   banner: {
     width: '100%',
@@ -102,7 +155,6 @@ const styles = StyleSheet.create({
     fontFamily: 'StoryScript',
     fontSize: 24,
     color: '#210535',
-    /*fontWeight: 'bold',*/
   },
   subtitle: {
     fontSize: 16,
@@ -137,6 +189,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 40,
     marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
   },
   buttonText: {
     color: '#FFFFFF',
