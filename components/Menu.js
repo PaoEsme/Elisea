@@ -1,25 +1,34 @@
-import { Entypo, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+// components/SideMenu.js (o menu.js)
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 
 const menuItems = [
-  { label: 'Perfil', icon: <FontAwesome name="user" size={40} color="#FFFFFF" />, screen: 'Perfil' },
+  { label: 'Perfil', icon: <FontAwesome name="user" size={40} color="#FFFFFF" />, screen: 'Perfil_User' }, 
   { label: 'Favoritos', icon: <FontAwesome name="star" size={40} color="#FFFFFF" />, screen: 'Favoritos' },
-  { label: 'Historial', icon: <FontAwesome name="history" size={40} color="#FFFFFF" />, screen: 'Historial' },
-  { label: 'Cambiar Contraseña', icon: <FontAwesome name="lock" size={40} color="#FFFFFF" />, screen: 'CambiarContraseña' },
-  { label: 'Reportar Errores', icon: <MaterialIcons name="report-problem" size={40} color="#FFFFFF" />, screen: 'ReportarErrores' },
-  { label: 'Contacto', icon: <Entypo name="mail" size={40} color="#FFFFFF" />, screen: 'Contacto' },
-  { label: 'Ayuda', icon: <FontAwesome name="question-circle" size={40} color="#FFFFFF" />, screen: 'Ayuda' },
-  { label: 'Manual de Usuario', icon: <FontAwesome name="file-text" size={40} color="#FFFFFF" />, screen: 'ManualUsuario' },
-  { label: 'Enviar Feedback', icon: <MaterialIcons name="feedback" size={40} color="#FFFFFF" />, screen: 'Feedback' },
+  { label: 'Historial', icon: <FontAwesome name="history" size={40} color="#FFFFFF" />, screen: 'Historial' }, // 👈 Ya estaba bien
+  { label: 'Cambiar Contraseña', icon: <FontAwesome name="lock" size={40} color="#FFFFFF" />, screen: 'CambiarContrasena' },
+  // ... otros items ...
   { label: 'Política de Privacidad', icon: <FontAwesome name="shield" size={40} color="#FFFFFF" />, screen: 'Privacidad' },
-  { label: 'Cerrar Sesión', icon: <MaterialIcons name="logout" size={40} color="#FFFFFF" />, screen: 'Logout' },
+  
+  // 👇 CAMBIO AQUÍ: De 'Logout' a 'Cerrar_S'
+  { label: 'Cerrar Sesión', icon: <MaterialIcons name="logout" size={40} color="#FFFFFF" />, screen: 'Cerrar_S' },
 ];
 
 export default function SideMenu({ onClose }) {
   const navigation = useNavigation();
+
+  const handleMenuPress = (screen) => {
+    if (onClose) onClose();
+    if (navigation) {
+      navigation.navigate(screen);
+    } else {
+      console.warn('Navigation no disponible');
+    }
+  };
 
   return (
     <TouchableOpacity style={styles.overlay} onPress={onClose}>
@@ -28,10 +37,8 @@ export default function SideMenu({ onClose }) {
           <TouchableOpacity
             key={index}
             style={styles.menuItem}
-            onPress={() => {
-              onClose();
-              navigation.navigate(item.screen);
-            }}
+            onPress={() => handleMenuPress(item.screen)}
+            activeOpacity={0.7}
           >
             <View style={styles.icon}>{item.icon}</View>
             <Text style={styles.label}>{item.label}</Text>
@@ -47,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.3)',
     justifyContent: 'flex-start',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end', 
   },
   menu: {
     width: screenWidth * 0.75,
@@ -64,11 +71,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#BB77AA',
     borderBottomWidth: 0.5,
   },
-  icon: {
-    marginRight: 15,
-  },
-  label: {
-    color: '#FFFFFF',
-    fontSize: 16,
-  },
+  icon: { marginRight: 15 },
+  label: { color: '#FFFFFF', fontSize: 16 },
 });

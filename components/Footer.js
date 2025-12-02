@@ -1,3 +1,4 @@
+// Footer.js
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -8,33 +9,30 @@ export default function NavigationMenu() {
   const navigation = useNavigation();
   const route = useRoute();
 
-  // Determinar qué icono está activo según la ruta actual
   const getActiveKey = () => {
     const routeName = route.name;
     
     if (routeName === 'HomeTab' || routeName === 'Home') return 'home';
-    if (routeName === 'Chat' || routeName === 'Mensajes') return 'chat';
-    if (routeName === 'Buscar' || routeName === 'Lupa') return 'search';
-    if (routeName === 'Notifications' || routeName === 'Notificaciones') return 'notifications';
+    if (routeName === 'ChatsScreen' || routeName === 'ChatDetalle') return 'chat';
+    if (routeName === 'Buscar') return 'search';
+    if (routeName === 'NotificationScreen' || routeName === 'NotificacionDetalle') return 'notifications';
     
-    return 'home'; // Por defecto
+    return 'home'; 
   };
 
   const active = getActiveKey();
 
   const icons = [
-    { name: 'home-outline', key: 'home', screen: 'HomeTab' },
-    { name: 'chatbubble-ellipses-outline', key: 'chat', screen: 'Chat' },
-    { name: 'search-outline', key: 'search', screen: 'Buscar' },
-    { name: 'notifications-outline', key: 'notifications', screen: 'Notifications' },
+    { name: 'home-outline', key: 'home', screen: 'Home' },
+    { name: 'chatbubble-ellipses-outline', key: 'chat', screen: 'Mensajes1' }, 
+    { name: 'search-outline', key: 'search', screen: 'Buscar' },      
+    { name: 'notifications-outline', key: 'notifications', screen: 'Notificaciones1' }, 
   ];
 
   const handlePress = (icon) => {
-    // Si la pantalla es HomeTab, navega dentro del tab navigator
     if (icon.screen === 'HomeTab') {
       navigation.navigate('Home', { screen: 'HomeTab' });
     } else {
-      // Para otras pantallas, navega directamente
       navigation.navigate(icon.screen);
     }
   };
@@ -80,8 +78,6 @@ const styles = StyleSheet.create({
     height: 70,
     justifyContent: 'space-around',
     alignItems: 'center',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
     paddingHorizontal: 10,
   },
   iconContainer: {

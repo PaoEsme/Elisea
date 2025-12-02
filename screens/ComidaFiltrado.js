@@ -1,23 +1,24 @@
+// screens/EquipamientosFiltrado.js
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Evento from '../components/Filters/Evento';
 import Fechas from '../components/Filters/Fecha';
 import Lugar from '../components/Filters/Lugar';
+import PaqueteEquipamiento from '../components/Filters/PaqueteEquipamiento';
 import Personas from '../components/Filters/Persona';
-import Precios from '../components/Filters/PrecioSalones';
-import Tipo from '../components/Filters/TiposSalones';
+import Tipo from '../components/Filters/TipoComida';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
-const SalonesFiltrado = ({ navigation }) => {
+const EquipamientosFiltrado = ({ navigation }) => {
   const [filtros, setFiltros] = useState({
     lugar: '',
     tipo: '',
     fechas: [],
     personas: { minimo: 50, maximo: 800 },
     evento: '',
-    precio: 8000,
+    paquetes: 0,
   });
 
   const [expandedSection, setExpandedSection] = useState(null);
@@ -37,34 +38,33 @@ const SalonesFiltrado = ({ navigation }) => {
       fechas: [],
       personas: { minimo: 50, maximo: 800 },
       evento: '',
-      precio: 8000,
+      paquetes: 0,
     };
     setFiltros({ ...filtros, [key]: defaults[key] });
   };
 
-  // --- FUNCIÓN PARA EL CARRITO ---
   const agregarAlCarrito = () => {
-    console.log('Agregando salón al carrito:', filtros);
-    navigation.navigate('Carrito', { 
+    navigation.navigate('Carrito', {
       nuevoItem: {
-        titulo: `Salón - ${filtros.tipo || 'General'}`,
-        proveedor: "Elisea Salones",
-        fecha: filtros.fechas[0] || "Por definir",
-        precio: filtros.precio,
-        imagen: "https://i.ibb.co/1d2q9Pz/salon.jpg" // Imagen de prueba
-      } 
+        titulo: `Paquete ${filtros.tipo || 'Equipo'}`,
+        proveedor: 'Elisea Equipos',
+        fecha: filtros.fechas[0] || 'Por definir',
+        precio: filtros.paquetes,
+        imagen: 'https://i.ibb.co/NWjzc93/deco.jpg', 
+      },
     });
   };
 
   return (
     <View style={styles.container}>
-      <Navbar /> 
+      <Navbar />
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={28} color="#7B2CBF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Salones</Text>
+        <Text style={styles.headerTitle}>Equipamientos</Text>
         <View style={{ width: 28 }} />
       </View>
 
@@ -76,7 +76,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('lugar')}
           onClear={() => clearFiltro('lugar')}
         >
-          <Lugar value={filtros.lugar} onChange={(value) => updateFiltro('lugar', value)} />
+          <Lugar value={filtros.lugar} onChange={(v) => updateFiltro('lugar', v)} />
         </FilterSection>
 
         <FilterSection
@@ -86,7 +86,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('tipo')}
           onClear={() => clearFiltro('tipo')}
         >
-          <Tipo value={filtros.tipo} onChange={(value) => updateFiltro('tipo', value)} />
+          <Tipo value={filtros.tipo} onChange={(v) => updateFiltro('tipo', v)} />
         </FilterSection>
 
         <FilterSection
@@ -96,7 +96,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('fechas')}
           onClear={() => clearFiltro('fechas')}
         >
-          <Fechas value={filtros.fechas} onChange={(value) => updateFiltro('fechas', value)} />
+          <Fechas value={filtros.fechas} onChange={(v) => updateFiltro('fechas', v)} />
         </FilterSection>
 
         <FilterSection
@@ -106,7 +106,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('personas')}
           onClear={() => clearFiltro('personas')}
         >
-          <Personas value={filtros.personas} onChange={(value) => updateFiltro('personas', value)} />
+          <Personas value={filtros.personas} onChange={(v) => updateFiltro('personas', v)} />
         </FilterSection>
 
         <FilterSection
@@ -116,49 +116,51 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('evento')}
           onClear={() => clearFiltro('evento')}
         >
-          <Evento value={filtros.evento} onChange={(value) => updateFiltro('evento', value)} />
+          <Evento value={filtros.evento} onChange={(v) => updateFiltro('evento', v)} />
         </FilterSection>
 
         <FilterSection
-          title="Precio"
-          value={`$${filtros.precio.toLocaleString()}`}
-          isExpanded={expandedSection === 'precio'}
-          onToggle={() => toggleSection('precio')}
-          onClear={() => clearFiltro('precio')}
+          title="Paquetes"
+          value={`$${(filtros.paquetes || 0).toLocaleString()}`}
+          isExpanded={expandedSection === 'paquetes'}
+          onToggle={() => toggleSection('paquetes')}
+          onClear={() => clearFiltro('paquetes')}
         >
-          <Precios value={filtros.precio} onChange={(value) => updateFiltro('precio', value)} personas={filtros.personas} />
+          <PaqueteEquipamiento
+            value={filtros.paquetes}
+            onChange={(v) => updateFiltro('paquetes', v)}
+            personas={filtros.personas}
+          />
         </FilterSection>
 
+        {/* Espacio para que el scroll no quede oculto por el botón fijo */}
         <View style={{ height: 180 }} />
       </ScrollView>
 
-      {/* --- SOLO BOTÓN DE CARRITO --- */}
+      {/* Solo botón de carrito */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.cartButton}
-          onPress={agregarAlCarrito}
-        >
-          <Ionicons name="cart" size={20} color="#FFF" style={{marginRight: 8}} />
+        <TouchableOpacity style={styles.cartButton} onPress={agregarAlCarrito}>
+          <Ionicons name="cart" size={20} color="#FFF" style={{ marginRight: 8 }} />
           <Text style={styles.cartButtonText}>Agregar al Carrito</Text>
         </TouchableOpacity>
       </View>
-      
-      <View style={{height: 0, overflow: 'hidden'}}><Footer /></View>
+
+      {/* Footer presente pero no visible (ya tienes un botón fijo abajo) */}
+      <View style={{ height: 0, overflow: 'hidden' }}>
+        <Footer />
+      </View>
     </View>
   );
 };
 
 const FilterSection = ({ title, value, isExpanded, onToggle, onClear, children }) => (
   <View style={styles.filterSection}>
-    <TouchableOpacity
-      style={styles.filterHeader}
-      onPress={onToggle}
-      activeOpacity={0.7}
-    >
+    <TouchableOpacity style={styles.filterHeader} onPress={onToggle} activeOpacity={0.7}>
       <View style={styles.filterHeaderLeft}>
         <Text style={styles.filterTitle}>{title}</Text>
         {value ? <Text style={styles.filterValue}>{value}</Text> : null}
       </View>
+
       {value ? (
         <TouchableOpacity
           onPress={(e) => {
@@ -172,11 +174,7 @@ const FilterSection = ({ title, value, isExpanded, onToggle, onClear, children }
       ) : null}
     </TouchableOpacity>
 
-    {isExpanded && (
-      <View style={styles.filterContent}>
-        {children}
-      </View>
-    )}
+    {isExpanded && <View style={styles.filterContent}>{children}</View>}
   </View>
 );
 
@@ -187,12 +185,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 12, // un poco más compacto
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
   },
-  headerTitle: { fontSize: 24, fontWeight: 'bold', color: '#7B2CBF' },
+  headerTitle: { fontSize: 22, fontWeight: 'bold', color: '#7B2CBF' },
   scrollView: { flex: 1 },
   filterSection: {
     backgroundColor: '#E8D5F2',
@@ -209,9 +207,11 @@ const styles = StyleSheet.create({
   },
   filterHeaderLeft: { flex: 1 },
   filterTitle: { fontSize: 16, fontWeight: 'bold', color: '#000' },
-  filterValue: { fontSize: 14, color: '#666', marginTop: 4 },
+  filterValue: { fontSize: 14, color: '#666', marginTop: 4, fontWeight: '500' },
   clearButton: { padding: 4 },
   filterContent: { padding: 16, paddingTop: 0 },
+
+  // botón fijo abajo
   buttonContainer: {
     position: 'absolute',
     bottom: 0, left: 0, right: 0,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
     zIndex: 100,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
@@ -237,4 +237,4 @@ const styles = StyleSheet.create({
   cartButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
 });
 
-export default SalonesFiltrado;
+export default EquipamientosFiltrado;
