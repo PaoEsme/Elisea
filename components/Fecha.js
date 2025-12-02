@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -28,14 +29,56 @@ export const Fechas = ({ value, onChange }) => {
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
 
+  // Funciones para navegar
+  const goToPreviousMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    setSelectedDate(null); // Limpiar selección al cambiar mes
+  };
+
+  const goToNextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    setSelectedDate(null); // Limpiar selección al cambiar mes
+  };
+
+  const goToPreviousYear = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear() - 1, currentMonth.getMonth()));
+    setSelectedDate(null);
+  };
+
+  const goToNextYear = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear() + 1, currentMonth.getMonth()));
+    setSelectedDate(null);
+  };
+
   const days = getDaysInMonth(currentMonth);
 
   return (
     <View>
-      <Text style={styles.calendarTitle}>
-        {monthNames[currentMonth.getMonth()]} de {currentMonth.getFullYear()}
-      </Text>
+      {/* Selector de Año */}
+      <View style={styles.yearSelector}>
+        <TouchableOpacity onPress={goToPreviousYear} style={styles.navButton}>
+          <Ionicons name="chevron-back" size={24} color="#7B2CBF" />
+        </TouchableOpacity>
+        <Text style={styles.yearText}>{currentMonth.getFullYear()}</Text>
+        <TouchableOpacity onPress={goToNextYear} style={styles.navButton}>
+          <Ionicons name="chevron-forward" size={24} color="#7B2CBF" />
+        </TouchableOpacity>
+      </View>
+
+      {/* Selector de Mes */}
+      <View style={styles.monthSelector}>
+        <TouchableOpacity onPress={goToPreviousMonth} style={styles.navButton}>
+          <Ionicons name="chevron-back" size={20} color="#7B2CBF" />
+        </TouchableOpacity>
+        <Text style={styles.monthText}>
+          {monthNames[currentMonth.getMonth()]}
+        </Text>
+        <TouchableOpacity onPress={goToNextMonth} style={styles.navButton}>
+          <Ionicons name="chevron-forward" size={20} color="#7B2CBF" />
+        </TouchableOpacity>
+      </View>
       
+      {/* Calendario */}
       <View style={styles.calendar}>
         <View style={styles.weekHeader}>
           {daysOfWeek.map((day, index) => (
@@ -72,13 +115,40 @@ export const Fechas = ({ value, onChange }) => {
 };
 
 const styles = StyleSheet.create({
-
-  calendarTitle: {
+  // Selector de Año
+  yearSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 16,
+  },
+  yearText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000000ff',
+  },
+  
+  // Selector de Mes
+  monthSelector: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingHorizontal: 16,
+  },
+  monthText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 16,
     color: '#000',
   },
+
+  navButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#F3E8FF',
+  },
+
   calendar: {
     backgroundColor: '#FFF',
     borderRadius: 8,

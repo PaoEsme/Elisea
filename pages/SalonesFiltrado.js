@@ -1,13 +1,13 @@
 // SalonesFiltrado.js
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import EventoFilter from '../components/Evento';
-import FechasFilter from '../components/Fecha';
-import LugarFilter from '../components/Lugar';
-import PersonasFilter from '../components/Persona';
-import PrecioFilter from '../components/Precio';
-import TipoFilter from '../components/Tipo';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
+import Evento from '../components/Evento';
+import Fechas from '../components/Fecha';
+import Lugar from '../components/Lugar';
+import Personas from '../components/Persona';
+import Precios from '../components/PrecioSalones';
+import Tipo from '../components/Tipo';
 
 const SalonesFiltrado = ({ navigation }) => {
   const [filtros, setFiltros] = useState({
@@ -16,7 +16,7 @@ const SalonesFiltrado = ({ navigation }) => {
     fechas: [],
     personas: { minimo: 50, maximo: 800 },
     evento: '',
-    precio: 5000,
+    precio: 8000,
   });
 
   const [expandedSection, setExpandedSection] = useState(null);
@@ -36,13 +36,12 @@ const SalonesFiltrado = ({ navigation }) => {
       fechas: [],
       personas: { minimo: 50, maximo: 800 },
       evento: '',
-      precio: 5000,
+      precio: 8000,
     };
     setFiltros({ ...filtros, [key]: defaults[key] });
   };
 
   const aplicarFiltros = () => {
-    // Aquí implementas la lógica para aplicar los filtros
     console.log('Filtros aplicados:', filtros);
     navigation.navigate('ResultadosSalones', { filtros });
   };
@@ -67,7 +66,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('lugar')}
           onClear={() => clearFiltro('lugar')}
         >
-          <LugarFilter
+          <Lugar
             value={filtros.lugar}
             onChange={(value) => updateFiltro('lugar', value)}
           />
@@ -81,7 +80,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('tipo')}
           onClear={() => clearFiltro('tipo')}
         >
-          <TipoFilter
+          <Tipo
             value={filtros.tipo}
             onChange={(value) => updateFiltro('tipo', value)}
           />
@@ -95,7 +94,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('fechas')}
           onClear={() => clearFiltro('fechas')}
         >
-          <FechasFilter
+          <Fechas
             value={filtros.fechas}
             onChange={(value) => updateFiltro('fechas', value)}
           />
@@ -109,7 +108,7 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('personas')}
           onClear={() => clearFiltro('personas')}
         >
-          <PersonasFilter
+          <Personas
             value={filtros.personas}
             onChange={(value) => updateFiltro('personas', value)}
           />
@@ -123,13 +122,13 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('evento')}
           onClear={() => clearFiltro('evento')}
         >
-          <EventoFilter
+          <Evento
             value={filtros.evento}
             onChange={(value) => updateFiltro('evento', value)}
           />
         </FilterSection>
 
-        {/* Precio Filter */}
+        {/* Precio Filter - AHORA RECIBE EL PROP PERSONAS */}
         <FilterSection
           title="Precio"
           value={`$${filtros.precio.toLocaleString()}`}
@@ -137,9 +136,10 @@ const SalonesFiltrado = ({ navigation }) => {
           onToggle={() => toggleSection('precio')}
           onClear={() => clearFiltro('precio')}
         >
-          <PrecioFilter
+          <Precios
             value={filtros.precio}
             onChange={(value) => updateFiltro('precio', value)}
+            personas={filtros.personas} // ⬅️ AQUÍ SE PASA LA PROP
           />
         </FilterSection>
 

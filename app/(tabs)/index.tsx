@@ -23,22 +23,6 @@ export default function Index() {
   const navigation = useNavigation();
   return <Filtrado />;
 }
-  */
-
-/*HOME
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import Home from '../../pages/Home';
-
-export default function Index() {
-  const navigation = useNavigation();
-  return <Home />;
-}
-  */
-
-/*LOGIN
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
 import Login from '../../pages/Login';
 
 export default function Index() {
