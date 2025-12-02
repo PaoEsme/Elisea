@@ -1,3 +1,7 @@
+// Navegación de Pagos
+import React from 'react';
+import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import Perfil_User from '@/screens/Metodo_Pago'; // ✅ Importar interfacez
 /* FILTRADO
 
 import { useNavigation } from '@react-navigation/native';
@@ -66,7 +70,7 @@ export default function Index() {
 }
 
 */
-
+/*
 import { createStackNavigator } from '@react-navigation/stack';
 import Salones from '../../pages/Salones';
 import SalonesFiltrado from '../../pages/SalonesFiltrado';
@@ -75,6 +79,19 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    /*<SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#3b004f" />
+      <Perfil_User /> 
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f6fa',
+  },
+});
       <Stack.Navigator>
         <Stack.Screen name="Salones" component={Salones} />
         <Stack.Screen name="Filtrado" component={SalonesFiltrado} />
